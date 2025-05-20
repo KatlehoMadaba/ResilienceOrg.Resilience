@@ -12,6 +12,7 @@ using Shesha.Authentication.JwtBearer;
 using Shesha.Authorization;
 using Shesha.Configuration;
 using Shesha.Configuration.Startup;
+using Shesha.Elmah;
 using Shesha.Import;
 using Shesha.Sms.Clickatell;
 using Shesha.Web.FormsDesigner;
@@ -31,8 +32,10 @@ namespace ResilienceOrg.Resilience
         typeof(SheshaImportModule),
         typeof(SheshaClickatellModule),
         typeof(ResilienceModule),
-        typeof(ResilienceApplicationModule)
-	 )]
+        typeof(ResilienceApplicationModule),
+        typeof(SheshaElmahModule)
+
+     )]
     public class ResilienceWebCoreModule : AbpModule
     {
         private readonly IConfigurationRoot _appConfiguration;

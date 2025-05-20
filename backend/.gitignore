@@ -1,0 +1,16 @@
+/.vs/*
+**/*.suo
+**/*.user
+**/*.bak
+**/*.orig
+**/UpgradeLog.htm
+**/bin/*
+**/obj/*
+**/App_Data/Logs/*
+**/ElmahLogs/*
+Logs
+/src/ResilienceOrg.Resilience.Web.Host/web.config
+/src/ResilienceOrg.Resilience.Web.Host/ResilienceOrg.Resilience.Web.Core.xml
+/sh.exe.stackdump
+
+

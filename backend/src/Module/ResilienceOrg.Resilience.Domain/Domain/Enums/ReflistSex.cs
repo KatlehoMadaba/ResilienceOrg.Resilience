@@ -6,7 +6,7 @@ namespace ResilienceOrg.Resilience.Domain.Domain.Enums
     /// <summary>
     /// Sex for a Survivors 
     /// </summary>
-    [ReferenceList("Sur", "SurvivorsSex")]
+    [ReferenceList("Res", "SurvivorsSex")]
     public enum ReflistSex : long
     {
         [Description(" Male")]

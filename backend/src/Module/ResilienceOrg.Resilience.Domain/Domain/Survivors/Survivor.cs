@@ -4,7 +4,7 @@ using ResilienceOrg.Resilience.Domain.Domain.Enums;
 using Shesha.Domain;
 using Shesha.Domain.Attributes;
 
-namespace ResilienceOrg.Resilience.Domain.Domain
+namespace ResilienceOrg.Resilience.Domain.Domain.Survivors
 {
     [Entity(TypeShortAlias = "Res.Survivor")]
     public class Survivor : Person

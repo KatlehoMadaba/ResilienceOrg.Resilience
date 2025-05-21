@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Abp.Domain.Entities.Auditing;
 using Shesha.Domain;
 
-namespace ResilienceOrg.Resilience.Domain.Domain
+namespace ResilienceOrg.Resilience.Domain.Domain.Journals
 {
 
     public class JournalEntry : FullAuditedEntity<Guid>

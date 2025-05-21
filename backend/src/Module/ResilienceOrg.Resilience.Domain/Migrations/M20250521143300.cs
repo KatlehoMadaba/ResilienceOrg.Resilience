@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentMigrator;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Shesha.FluentMigrator;
 
 namespace ResilienceOrg.Resilience.Domain.Migrations
 {
-    [Migration(20250520195300)]
-   public  class M20250520195300:Migration
+    [Migration(20250521143300)]
+    public class M20250521143300:Migration
     {
-        /// <summary>
-        /// Code to execute when executing the migrations
-        /// </summary>
         /// <summary>
         /// Code to execute when executing the migrations
         /// </summary>
@@ -33,9 +25,9 @@ namespace ResilienceOrg.Resilience.Domain.Migrations
                 .WithColumn("IsAnonymous").AsBoolean().NotNullable().WithDefaultValue(false);
 
             // Create foreign key to Core_Persons table
-            Create.ForeignKey("FK_Res_Testimonies_Core_Persons_PersonId")
+            Create.ForeignKey("FK_Res_Testimonies_Res_RPersons_PersonId")
                 .FromTable("Res_Testimonies").ForeignColumn("PersonId")
-                .ToTable("Core_Persons").PrimaryColumn("Id");
+                .ToTable("Res_RPersons").PrimaryColumn("Id");
 
             // Create index for better performance
             Create.Index("IX_Res_Testimonies_PersonId")
@@ -52,7 +44,5 @@ namespace ResilienceOrg.Resilience.Domain.Migrations
             // but ensure it's never accidentally called as it would cause data loss
             throw new NotImplementedException("This migration has already been applied to the database and should not be rolled back.");
         }
-
-
     }
 }

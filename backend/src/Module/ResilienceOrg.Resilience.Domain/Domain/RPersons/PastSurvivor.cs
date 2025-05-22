@@ -1,11 +1,12 @@
 ﻿using System;
 using ResilienceOrg.Resilience.Domain.Domain.Enums;
+using Shesha.Domain;
 using Shesha.Domain.Attributes;
 
 namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
 {
     [Discriminator]
-    public class PastSurvivor :RPerson
+    public class PastSurvivor : RPerson
     {
         public virtual DateTime? IncidentDate { get; set; }
         public virtual bool HasDisclosedBefore { get; set; }

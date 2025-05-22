@@ -9,23 +9,25 @@ using Abp.Domain.Entities.Auditing;
 using Shesha.Authorization.Users;
 using ResilienceOrg.Resilience.Domain.Domain.Enums;
 using Shesha.Domain.Attributes;
+using Shesha.Domain;
 
 namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
 {
     [Discriminator]
     public class RPerson: FullAuditedEntity<Guid>
     {
-        [Required]
-        public long UserId { get; set; }
-        [ForeignKey("UserId")]
-        public User? User { get; set; }
-        public string? AnonymousId { get; set; }
-        public string? DisplayName { get; set; }
-        public bool? UseDisplayNameOnly { get; set; }
+        
+        public virtual Guid? PersonId { get; set; }
+
+        [ForeignKey("PersonId")]
+        public virtual Shesha.Domain.Person? Person { get; set; }
+        public virtual string? AnonymousId { get; set; }
+        public virtual string? DisplayName { get; set; }
+        public virtual bool? UseDisplayNameOnly { get; set; }
         public virtual ReflistSex? Sex { get; set; }
-        public string? SexText { get; set; }
-        public string? PhoneNumber { get; set; }
-        public bool? IsAnonymous { get; set; }
+        public virtual string? SexText { get; set; }
+        public virtual string? PhoneNumber { get; set; }
+        public virtual bool? IsAnonymous { get; set; }
 
     }
 }

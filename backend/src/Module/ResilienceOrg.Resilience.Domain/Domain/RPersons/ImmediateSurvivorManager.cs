@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
-using Abp.Runtime.Session;
 using Abp.UI;
 using NHibernate.Linq;
-using ResilienceOrg.Resilience.Domain.Domain;
 using ResilienceOrg.Resilience.Domain.Domain.Enums;
 using Shesha.Authorization.Users;
+using Shesha.Domain;
 
 
 namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
@@ -18,17 +17,17 @@ namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
     {
         private readonly UserManager _userManager;
         private readonly IRepository<ImmediateSurvivor, Guid> _imdsurvivorRepository;
-        private readonly IAbpSession _abpSession;
+        private readonly IRepository<Person, Guid> _personRepository;
+
         public ImmediateSurvivorManager
             (
             UserManager userManager,
-            IRepository<ImmediateSurvivor, Guid> imdsurvivorRepository
-,
-            IAbpSession abpSession)
+            IRepository<ImmediateSurvivor, Guid> imdsurvivorRepository,
+            IRepository<Person, Guid> personRepository)
         {
             _userManager = userManager;
             _imdsurvivorRepository = imdsurvivorRepository;
-            _abpSession = abpSession;
+            _personRepository = personRepository;
         }
         public async Task<ImmediateSurvivor> CreateImdSurvivorAsync(
             string? name,
@@ -49,46 +48,58 @@ namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
             ImmediateSurvivor survivor;
             try
             {
-                    // 1. Create user
-                    var user = new User
-                    {
-                        Name = name,
-                        Surname = surname,
-                        EmailAddress = emailAddress,
-                        UserName = username,
-                        TenantId = 1
-                    };
+                //1.Create Person 
+                var person = new Person
+                {
+                    FirstName = name,
+                    LastName = surname,
+                    EmailAddress1 = emailAddress,
+                    TenantId = 1
+                };
 
-                    var userCreationResult = await _userManager.CreateAsync(user, password);
-                    if (!userCreationResult.Succeeded)
-                    {
-                        throw new UserFriendlyException("Failed to create user: " + string.Join(", ", userCreationResult.Errors));
-                    }
 
-                    await _userManager.AddToRoleAsync(user, "immediatesurvivor");
+                //2.Create user
+                var user = new User
+                {
+                    Name = name,
+                    Surname = surname,
+                    EmailAddress = emailAddress,
+                    UserName = username,
+                    TenantId = 1
+                };
 
-                    // 2. Create ImmediateSurvivor (inherits from Person)
-                    var immediateSurvivor = new ImmediateSurvivor
-                    {
-                        UserId = user.Id,
-                        AnonymousId = anonymousId,
-                        DisplayName = displayName,
-                        UseDisplayNameOnly = useDisplayNameOnly,
-                        Sex = sex,
-                        PhoneNumber = phoneNumber,
-                        IsAnonymous = false,
-                        IncidentDate = incidentDate,
-                        HasReceivedMedicalAttention = hasReceivedMedicalAttention ?? false,
-                        HasReportedToAuthorities = hasReportedToAuthorities ?? false,
-                        Testimonies = new List<Testimony>()
-                    };
+                var userCreationResult = await _userManager.CreateAsync(user, password);
+                if (!userCreationResult.Succeeded)
+                {
+                    throw new UserFriendlyException("Failed to create user: " + string.Join(", ", userCreationResult.Errors));
+                }
 
-                    await _imdsurvivorRepository.InsertAsync(immediateSurvivor);
+                await _userManager.AddToRoleAsync(user, "immediatesurvivor");
+                //return Id of person
+               var personCreation= await _personRepository.InsertAndGetIdAsync(person);
+                // 2. Create ImmediateSurvivor (inherits from RPerson)
+                var immediateSurvivor = new ImmediateSurvivor
+                {
+                    //UserId = user.Id,
+                    PersonId = personCreation,
+                    AnonymousId = anonymousId,
+                    DisplayName = displayName,
+                    UseDisplayNameOnly = useDisplayNameOnly,
+                    Sex = sex,
+                    PhoneNumber = phoneNumber,
+                    IsAnonymous = false,
+                    IncidentDate = incidentDate,
+                    HasReceivedMedicalAttention = hasReceivedMedicalAttention ?? false,
+                    HasReportedToAuthorities = hasReportedToAuthorities ?? false,
+                    Testimonies = new List<Testimony>()
+                };
 
-                    // Optional: fetch again if you need navigation properties
-                    survivor = immediateSurvivor;
-                
-                
+                await _imdsurvivorRepository.InsertAsync(immediateSurvivor);
+              
+                // Optional: fetch again if you need navigation properties
+                survivor = immediateSurvivor;
+
+
             }
             catch (Exception ex)
             {
@@ -107,12 +118,11 @@ namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
             try
             {
 
-                    var query =  _imdsurvivorRepository.GetAllIncluding(p => p.User);
-                    //var query = await _imdsurvivorRepository.GetAllIncludingAsync(p => p.User);
+                var query = _imdsurvivorRepository.GetAllIncluding(p => p.Person);
 
-                    var immediateSurvivor = await query.FirstOrDefaultAsync(p => p.Id == id);
+                var immediateSurvivor = await query.FirstOrDefaultAsync(p => p.PersonId == id);
 
-                    return immediateSurvivor;
+                return immediateSurvivor;
 
             }
             catch (Exception ex)
@@ -126,19 +136,20 @@ namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
 
         }
 
-        public async Task<ImmediateSurvivor> GetImmediateSurvivorByUserIdAsync(long userId)
-        {
-                var ImmediateSurvivors = _imdsurvivorRepository.GetAllIncluding(p=>p.User);
+        //public async Task<ImmediateSurvivor> GetImmediateSurvivorByUserIdAsync(long userId)
+        //{
+        //        var ImmediateSurvivors = _imdsurvivorRepository.GetAllIncluding(p=>p.);
 
-                var ImmediateSurvivor = await ImmediateSurvivors.FirstOrDefaultAsync(p => p.UserId == userId);
-                if (ImmediateSurvivor == null)
-                {
-                    throw new UserFriendlyException("ImmediateSurvivor not found");
-                }
-               
-                return ImmediateSurvivor;
-            }
-        }
+        //        var ImmediateSurvivor = await ImmediateSurvivors.FirstOrDefaultAsync(p => p.UserId == userId);
+        //        if (ImmediateSurvivor == null)
+        //        {
+        //            throw new UserFriendlyException("ImmediateSurvivor not found");
+        //        }
 
-    
+        //        return ImmediateSurvivor;
+        //    }
+        //}
+
+
+    }
 }

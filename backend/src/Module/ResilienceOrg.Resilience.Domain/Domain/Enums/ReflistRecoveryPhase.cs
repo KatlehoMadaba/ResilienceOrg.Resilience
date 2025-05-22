@@ -32,5 +32,7 @@ namespace ResilienceOrg.Resilience.Domain.Domain.Enums
 
         [Description("Unsure")]
         Unsure = 5,
+
+        NoRecovery = 6,
     }
 }

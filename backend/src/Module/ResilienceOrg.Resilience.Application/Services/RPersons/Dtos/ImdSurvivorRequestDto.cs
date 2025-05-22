@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ResilienceOrg.Resilience.Domain.Domain.Enums;
+using Shesha.Domain.Enums;
 
 namespace ResilienceOrg.Resilience.Common.Services.RPersons.Dtos
 {
@@ -17,7 +18,7 @@ namespace ResilienceOrg.Resilience.Common.Services.RPersons.Dtos
         public string? EmailAddress { get; set; }
         public string? DisplayName { get; set; }
         public bool? UseDisplayNameOnly { get; set; }
-        public ReflistSex? Sex { get; set; }
+        public RefListGender? Sex { get; set; }
         public string? PhoneNumber { get; set; }
 
         //ImdSurvivor

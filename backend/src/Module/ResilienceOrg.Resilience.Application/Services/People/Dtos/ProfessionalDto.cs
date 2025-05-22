@@ -1,11 +1,11 @@
-﻿namespace ResilienceOrg.Resilience.Domain.Domain.RPersons
+﻿namespace ResilienceOrg.Resilience.Common.Services.People.Dtos
 {
-    public class Professional : RPerson
+    public class ProfessionalDto
     {
         public virtual string Profession { get; set; }
         public virtual string Organization { get; set; }
         public virtual string Credentials { get; set; }
         public virtual bool IsVerified { get; set; }
-        public virtual bool isActive { get; set; }
+        public virtual bool IsActive { get; set; }
     }
 }

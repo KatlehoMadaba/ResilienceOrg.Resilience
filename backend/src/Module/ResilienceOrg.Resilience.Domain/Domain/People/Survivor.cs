@@ -19,42 +19,7 @@ namespace ResilienceOrg.Resilience.Domain.Domain.People
         public virtual bool? IsAnonymous { get; set; }
         public virtual DateTime? IncidentDate { get; set; }
         public virtual bool HasReceivedMedicalAttention { get; set; }
-        public virtual bool HasReportedToAuthori
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            ties { get; set; }
+        public virtual bool HasReportedToAuthorities { get; set; }
         //Past S fieds 
         public virtual bool HasDisclosedBefore { get; set; }
         public virtual int TimeElapsedInDays { get; set; } // Time since incident

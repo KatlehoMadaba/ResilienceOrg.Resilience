@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResilienceOrg.Resilience.Domain.Domain.Reports
 {
-    public class SexualAssaultReport : 
+    public class SexualAssaultReport :Report 
     {
 
         // Victim Details
